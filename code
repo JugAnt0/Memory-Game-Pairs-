@@ -1,0 +1,57 @@
+import random
+
+def memory_game():
+    print("🧠 Welcome to the Memory Game (Pairs)!")
+    print("Match all the pairs to win.\n")
+
+
+    items = ["😀", "🐱", "🍎", "🚗", "⚽", "🎵"]
+    pairs = items * 2  # duplicate for pairs
+    random.shuffle(pairs)
+
+  
+    board = ["❓"] * len(pairs)
+    revealed = [False] * len(pairs)
+    attempts = 0
+
+    def display_board():
+        print("\nBoard:")
+        for i, val in enumerate(board, 1):
+            print(f"{i:2}:{val}", end="  ")
+            if i % 4 == 0:
+                print()
+        print()
+
+ 
+    while not all(revealed):
+        display_board()
+        try:
+            choice1 = int(input("Pick the first card (1-12): ")) - 1
+            choice2 = int(input("Pick the second card (1-12): ")) - 1
+
+            if choice1 == choice2 or not (0 <= choice1 < len(pairs)) or not (0 <= choice2 < len(pairs)):
+                print("⚠️ Invalid choice. Try again.")
+                continue
+            if revealed[choice1] or revealed[choice2]:
+                print("⚠️ One of those cards is already matched.")
+                continue
+
+            board[choice1] = pairs[choice1]
+            board[choice2] = pairs[choice2]
+            display_board()
+            attempts += 1
+
+            if pairs[choice1] == pairs[choice2]:
+                print("✅ Match found!")
+                revealed[choice1] = revealed[choice2] = True
+            else:
+                print("❌ Not a match.")
+                board[choice1] = board[choice2] = "❓"
+
+        except ValueError:
+            print("⚠️ Please enter valid numbers.")
+
+    print(f"🎉 You found all pairs in {attempts} attempts!")
+
+
+memory_game()
